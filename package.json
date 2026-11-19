@@ -1,0 +1,7 @@
+{
+  "name": "codex-remote-browser-tools",
+  "version": "1.0.0",
+  "dependencies": {
+    "playwright": "1.65.1"
+  }
+}

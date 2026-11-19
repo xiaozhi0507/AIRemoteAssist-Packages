@@ -1,0 +1,33 @@
+{
+  "Node": {
+    "Url": "https://nodejs.org/dist/v22.23.5/node-v22.23.5-win-x64.zip",
+    "Sha256": "4a191082e9706866830379d577d2cc8a50c776fcd9436a8d061b063ed0d9a0e3",
+    "Version": "22.23.5"
+  },
+  "Ripgrep": {
+    "Url": "https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-pc-windows-msvc.zip",
+    "Sha256": "71b2fef860abe467217a538ff31de02f5258807c0129f771846f87bd029aafc5",
+    "Version": "15.2.0"
+  },
+  "OpenSSH": {
+    "Version": "10.4.0.0 Preview",
+    "Url": "https://github.com/PowerShell/Win32-OpenSSH/releases/download/10.4.0.0p1-Preview/OpenSSH-Win64-v10.4.0.0.msi",
+    "FileName": "OpenSSH-Win64-v10.4.0.0.msi",
+    "Sha256": "788D8643464A01EB63640A2FD746F9ED23D106B5A901A35F88DC8CD40E446AC9"
+  },
+  "TailscaleFull": {
+    "Version": "1.104.7",
+    "Url": "https://pkgs.tailscale.com/stable/tailscale-setup-full-1.104.7.exe",
+    "FileName": "tailscale-setup-full-1.104.7.exe",
+    "Sha256": "D943C5D244E44D65BDE24656366D8D4EE80476702767D62160766CBAFE9CC429"
+  },
+  "PowerShellMsi": {
+    "FileName": "PowerShell-7.6.10-win-x64.msi",
+    "Sha256": "7D8DAEA48B450D4D62FCD1AC4D6FAA7AC2DB5E11ABA5061EE81B7496ADCA8C07",
+    "Url": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.10/PowerShell-7.6.10-win-x64.msi"
+  },
+  "OfflineDevTools": {
+    "FileName": "DevTools-win-x64-2.11.0.zip",
+    "Sha256": "ca11d289e62538f600c409c26e3b568dffd2910a29c94b43ab3c3b2bd3e9094e"
+  }
+}

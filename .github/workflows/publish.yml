@@ -1,0 +1,51 @@
+name: Publish verified Windows packages
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/publish.yml', 'packages.json', 'build_devtools.py', 'browser-metadata.json', 'package-lock.json']
+permissions:
+  contents: write
+concurrency: publish-prerequisites
+jobs:
+  publish:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14.3'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Fetch browsers and reproduce the verified developer bundle
+        shell: pwsh
+        run: |
+          $work = Join-Path $env:RUNNER_TEMP 'packages'
+          $env:PLAYWRIGHT_BROWSERS_PATH = Join-Path $work 'browsers'
+          npm ci --ignore-scripts --no-audit --no-fund
+          if ($LASTEXITCODE) { throw 'npm ci failed' }
+          node node_modules/playwright/cli.js install chromium winldd
+          if ($LASTEXITCODE) { throw 'Browser fetch failed' }
+          python build_devtools.py $work
+          if ($LASTEXITCODE) { throw 'Developer bundle mismatch' }
+      - name: Fetch and verify vendor installers, then publish
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $work = Join-Path $env:RUNNER_TEMP 'packages'
+          $config = Get-Content -Raw packages.json | ConvertFrom-Json
+          $paths = foreach ($key in 'OpenSSH','PowerShellMsi','TailscaleFull','OfflineDevTools') {
+            $item = $config.$key
+            $path = Join-Path $work $item.FileName
+            if ($item.Url) {
+              curl.exe -fL --retry 3 -o $path $item.Url
+              if ($LASTEXITCODE) { throw "Download failed for $key" }
+            }
+            if ((Get-FileHash $path).Hash -ne $item.Sha256) { throw "Hash mismatch for $key" }
+            $path
+          }
+          $tag = 'prerequisites-v1'
+          gh release create $tag @paths --target $env:GITHUB_SHA --title 'Windows x64 通用安装包' --notes 'OpenSSH、PowerShell、Tailscale 和开发工具。所有附件均已按原始文件 SHA-256 核验。'
+          if ($LASTEXITCODE) { throw 'Release publication failed' }
