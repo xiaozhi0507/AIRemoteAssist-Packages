@@ -72,7 +72,7 @@ def build():
             entry.compress_type = zipfile.ZIP_DEFLATED
             entry.compress_level = 5
             with (BROWSER_DIR / name).open("rb") as stream, out.open(entry, "w") as target:
-                shutil.copyfileobj(stream, target, 1024 * 1024)
+                shutil.copyfileobj(stream, target, 8192)
     with output.open("rb") as stream:
         if hashlib.file_digest(stream, "sha256").hexdigest() != VERSIONS["OfflineDevTools"]["Sha256"].lower():
             raise ValueError("Development bundle SHA-256 differs from the original.")
